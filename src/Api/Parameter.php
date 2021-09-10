@@ -22,20 +22,23 @@ class Parameter extends AbstractApi
     /**
      * A list of all parameters for a given component and virtual host.
      *
-     * @param string $component
-     * @param string|null $vhost
-     * @param string|null $name
+     * @param  string  $component
+     * @param  string|null  $vhost
+     * @param  string|null  $name
+     *
      * @return array
      */
     public function get($component, $vhost = null, $name = null)
     {
         if ($vhost && $name) {
             return $this->client->send(sprintf('/api/parameters/%s/%s/%s', urlencode($component), urlencode($vhost), urlencode($name)));
-        } elseif ($vhost) {
-            return $this->client->send(sprintf('/api/parameters/%s/%s', urlencode($component), urlencode($vhost)));
-        } else {
-            return $this->client->send(sprintf('/api/parameters/%s', urlencode($component)));
         }
+
+        if ($vhost) {
+            return $this->client->send(sprintf('/api/parameters/%s/%s', urlencode($component), urlencode($vhost)));
+        }
+
+        return $this->client->send(sprintf('/api/parameters/%s', urlencode($component)));
     }
 
     /**
@@ -48,10 +51,11 @@ class Parameter extends AbstractApi
      *     "value": "guest"
      * }
      *
-     * @param string $component
-     * @param string $vhost
-     * @param string $name
-     * @param array $parameter
+     * @param  string  $component
+     * @param  string  $vhost
+     * @param  string  $name
+     * @param  array  $parameter
+     *
      * @return array
      */
     public function create($component, $vhost, $name, array $parameter)
@@ -62,9 +66,10 @@ class Parameter extends AbstractApi
     /**
      * Delete a parameter
      *
-     * @param string $component
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $component
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
      */
     public function delete($component, $vhost, $name)

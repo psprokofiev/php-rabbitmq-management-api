@@ -22,7 +22,8 @@ class Vhost extends AbstractApi
     /**
      * An individual virtual host.
      *
-     * @param string $name
+     * @param  string  $name
+     *
      * @return array
      */
     public function get($name)
@@ -33,7 +34,8 @@ class Vhost extends AbstractApi
     /**
      * As a virtual host only has a name, you do not need an HTTP body when PUTing one of these.
      *
-     * @param string $name
+     * @param  string  $name
+     *
      * @return array
      */
     public function create($name)
@@ -44,7 +46,8 @@ class Vhost extends AbstractApi
     /**
      * Delete a vhost.
      *
-     * @param string $name
+     * @param  string  $name
+     *
      * @return array
      */
     public function delete($name)
@@ -55,7 +58,8 @@ class Vhost extends AbstractApi
     /**
      * A list of all permissions for a given virtual host.
      *
-     * @param string $name
+     * @param  string  $name
+     *
      * @return array
      */
     public function permissions($name)

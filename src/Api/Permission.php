@@ -24,8 +24,9 @@ class Permission extends AbstractApi
     /**
      * An individual permission of a user and virtual host.
      *
-     * @param string $vhost
-     * @param string $user
+     * @param  string  $vhost
+     * @param  string  $user
+     *
      * @return array
      */
     public function get($vhost, $user)
@@ -40,15 +41,16 @@ class Permission extends AbstractApi
      *
      * All keys are mandatory.
      *
-     * @param string $vhost
-     * @param string $user
-     * @param array $permission
+     * @param  string  $vhost
+     * @param  string  $user
+     * @param  array  $permission
+     *
      * @return array
      * @throws InvalidArgumentException
      */
     public function create($vhost, $user, array $permission)
     {
-        if (!isset($permission['configure']) || !isset($permission['write']) || !isset($permission['read'])) {
+        if (! isset($permission['configure']) || ! isset($permission['write']) || ! isset($permission['read'])) {
             throw new InvalidArgumentException("Error creating permission: 'configure', 'write', and 'read' permissions must be properly set.");
         }
 
@@ -58,13 +60,13 @@ class Permission extends AbstractApi
     /**
      * Delete a specific set of permissions
      *
-     * @param string $vhost
-     * @param string $user
+     * @param  string  $vhost
+     * @param  string  $user
+     *
      * @return array
      */
     public function delete($vhost, $user)
     {
         return $this->client->send(sprintf('/api/permissions/%s/%s', urlencode($vhost), urlencode($user)), 'DELETE');
     }
-
 }

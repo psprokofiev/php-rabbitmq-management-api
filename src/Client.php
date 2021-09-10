@@ -2,44 +2,32 @@
 
 namespace RabbitMq\ManagementApi;
 
-use Http\Client\Common\Plugin\AuthenticationPlugin;
-use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\Authentication\BasicAuth;
+use Illuminate\Http\Client\Factory as Http;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Str;
+use JsonException;
 
-/**
- * ManagementApi
- *
- * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
- */
 class Client
 {
-    /**
-     * @var HttpClient
-     */
+    /** @var PendingRequest */
     protected $client;
-    protected $messageFactory;
-    protected $baseUrl;
 
     /**
-     * @param HttpClient $client
-     * @param string $baseUrl
-     * @param string $username
-     * @param string $password
+     * @param  string  $host
+     * @param  string  $username
+     * @param  string  $password
      */
-    public function __construct(HttpClient $client = null, $baseUrl = 'http://localhost:15672', $username = 'guest', $password = 'guest')
+    public function __construct($host = 'http://localhost:15672', $username = 'guest', $password = 'guest')
     {
-        $this->baseUrl = $baseUrl;
-        $this->messageFactory = MessageFactoryDiscovery::find();
-
-        $this->client = new PluginClient(
-            $client ?: HttpClientDiscovery::find(), [
-            new AuthenticationPlugin(new BasicAuth($username, $password)),
-            new HeaderDefaultsPlugin(['Content-Type' => 'application/json'])
-        ]);
+        $this->client = (new Http)
+            ->baseUrl(
+                env('RABBITMQ_MANAGMENT_BASEURI', $host)
+            )->withBasicAuth(
+                env('RABBITMQ_MANAGMENT_USERNAME', $username),
+                env('RABBITMQ_MANAGMENT_PASSWORD', $password)
+            )->withHeaders([
+                'Content-Type' => 'application/json'
+            ]);
     }
 
     /**
@@ -50,8 +38,10 @@ class Client
      *
      * Note: the test queue will not be deleted (to to prevent queue churn if this is repeatedly pinged).
      *
-     * @param string $vhost
+     * @param  string  $vhost
+     *
      * @return array
+     * @throws JsonException
      */
     public function alivenessTest($vhost)
     {
@@ -62,6 +52,7 @@ class Client
      * Various random bits of information that describe the whole system.
      *
      * @return array
+     * @throws JsonException
      */
     public function overview()
     {
@@ -72,6 +63,7 @@ class Client
      * A list of extensions to the management plugin.
      *
      * @return array
+     * @throws JsonException
      */
     public function extensions()
     {
@@ -87,10 +79,11 @@ class Client
      * - Conflicts will cause an error.
      * - In the event of an error you will be left with a part-applied set of definitions.
      *
-     * For convenience you may upload a file from a browser to this URI (i.e. you can use multipart/form-data as well as
+     * For convenience, you may upload a file from a browser to this URI (i.e. you can use multipart/form-data as well as
      * application/json) in which case the definitions should be uploaded as a form field named "file".
      *
      * @return mixed
+     * @throws JsonException
      */
     public function definitions()
     {
@@ -187,6 +180,7 @@ class Client
 
     /**
      * @return array
+     * @throws JsonException
      */
     public function whoami()
     {
@@ -194,21 +188,26 @@ class Client
     }
 
     /**
-     * @param string $endpoint Resource URI.
-     * @param string $method
-     * @param array $headers  HTTP headers
-     * @param string|resource|array $body Entity body of request (POST/PUT) or response (GET)
-     * @return array
+     * @param  string  $endpoint
+     * @param  string  $method
+     * @param  array  $headers
+     * @param  null  $body
+     *
+     * @return mixed
+     * @throws JsonException
      */
-    public function send($endpoint, $method = 'GET', array $headers = [], $body = null)
+    public function send(string $endpoint, $method = 'GET', array $headers = [], $body = null)
     {
-        if (null !== $body) {
-            $body = json_encode($body);
+        $method = Str::lower($method);
+
+        if ($body !== null) {
+            $body = json_encode($body, JSON_THROW_ON_ERROR);
         }
 
-        $request = $this->messageFactory->createRequest($method, $this->baseUrl . $endpoint, $headers, $body);
-        $response = $this->client->sendRequest($request);
+        $response = $this->client
+            ->withHeaders($headers)
+            ->$method($endpoint, $body);
 
-        return json_decode($response->getBody()->getContents(), true);
+        return $response->json();
     }
 }

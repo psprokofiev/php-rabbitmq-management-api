@@ -22,7 +22,8 @@ class User extends AbstractApi
     /**
      * An individual user.
      *
-     * @param string $name
+     * @param  string  $name
+     *
      * @return array
      */
     public function get($name)
@@ -43,8 +44,9 @@ class User extends AbstractApi
      * ensure the user cannot use a password to log in. tags is a comma-separated list of tags for the user. Currently
      * recognised tags are "administrator", "monitoring" and "management".
      *
-     * @param string $name
-     * @param array $user
+     * @param  string  $name
+     * @param  array  $user
+     *
      * @return mixed
      */
     public function create($name, array $user)
@@ -55,7 +57,8 @@ class User extends AbstractApi
     /**
      * Delete a user.
      *
-     * @param string $name
+     * @param  string  $name
+     *
      * @return array
      */
     public function delete($name)
@@ -66,7 +69,8 @@ class User extends AbstractApi
     /**
      * A list of all permissions for a given user.
      *
-     * @param string $name
+     * @param  string  $name
+     *
      * @return array
      */
     public function permissions($name)

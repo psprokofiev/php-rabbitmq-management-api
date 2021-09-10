@@ -26,8 +26,9 @@ class Policy extends AbstractApi
      *
      * An individual policy.
      *
-     * @param string $vhost
-     * @param string|null $name
+     * @param  string  $vhost
+     * @param  string|null  $name
+     *
      * @return array
      */
     public function get($vhost, $name = null)
@@ -44,9 +45,10 @@ class Policy extends AbstractApi
      *
      * {"pattern":"^amq.", "definition": {"federation-upstream-set":"all"}, "priority":0}
      *
-     * @param string $vhost
-     * @param string $name
-     * @param array $policy
+     * @param  string  $vhost
+     * @param  string  $name
+     * @param  array  $policy
+     *
      * @return array
      */
     public function create($vhost, $name, array $policy)
@@ -57,8 +59,9 @@ class Policy extends AbstractApi
     /**
      * Delete a policy
      *
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
      */
     public function delete($vhost, $name)

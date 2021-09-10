@@ -1,9 +1,7 @@
 PHP RabbitMQ Management Api
 ===========================
 
-A simple object oriented wrapper for the [RabbitMQ Management HTTP Api](http://hg.rabbitmq.com/rabbitmq-management/raw-file/rabbitmq_v3_0_3/priv/www/api/index.html) in PHP 5.3
-
-Uses [PHP-HTTP](http://docs.php-http.org/en/latest/index.html) for requests.
+A simple object oriented wrapper for the [RabbitMQ Management HTTP Api](https://www.rabbitmq.com/management.html) in PHP
 
 Installation
 ------------
@@ -11,15 +9,7 @@ Installation
 Installable through composer via:
 
 ```bash
-$ composer require richardfullmer/rabbitmq-management-api
-```
-
-Additionally, you require a [httplug compatible client](http://docs.php-http.org/en/latest/clients.html).
-
-For example, use the guzzle6 adapter:
-
-```bash
-$ composer require php-http/guzzle6-adapter
+$ composer require psprokofiev/rabbitmq-management-api
 ```
 
 Basic Usage
@@ -28,7 +18,7 @@ Basic Usage
 ```php
 <?php
 
-use RabbitMq\ManagementApi\Client;
+use RabbitMQ\ManagementApi\Client;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -45,15 +35,3 @@ if ($response['routed']) {
     print 'Message delivered';
 }
 ```
-
-License
--------
-
-php-rabbitmq-management-api is licensed under the MIT License - see the LICENSE file for details
-
-Credits
--------
-
-Structure from [KnpLabs php-github-api](https://github.com/KnpLabs/php-github-api)
-
-Rabbit's Excellent Message Queue

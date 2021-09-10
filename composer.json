@@ -1,34 +1,49 @@
 {
-    "name": "richardfullmer/rabbitmq-management-api",
+    "name": "psprokofiev/rabbitmq-management-api",
     "type": "library",
-    "description": "An object oriented wrapper for the RabbitMQ Management HTTP Api",
-    "homepage": "https://github.com/richardfullmer/php-rabbitmq-management-api",
-    "keywords": ["rest", "message queue", "rabbitmq"],
+    "description": "An object oriented wrapper for the RabbitMQ Management HTTP API",
+    "homepage": "https://github.com/psprokofiev/php-rabbitmq-management-api",
+    "keywords": [
+        "rest",
+        "message queue",
+        "rabbitmq"
+    ],
     "license": "MIT",
     "authors": [
         {
             "name": "Richard Fullmer",
             "email": "richardfullmer@gmail.com",
             "homepage": "https://github.com/richardfullmer"
+        },
+        {
+            "name": "Pavel Prokofiev",
+            "email": "ps.prokofiev@gmail.com",
+            "homepage": "https://github.com/psprokofiev"
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "psr/http-message": "^1.0",
-        "php-http/client-implementation": "^1.0",
-        "php-http/client-common": "^1.0",
-        "php-http/httplug": "^1.0",
-        "php-http/message-factory": "^1.0",
-        "php-http/discovery": "^1.0"
+        "php": "^7.4|^8.0",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.3",
+        "illuminate/http": "^8.60",
+        "illuminate/support": "^8.60",
+        "vlucas/phpdotenv": "^5.3"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
             "RabbitMq\\ManagementApi\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/"
+        ]
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.x-dev"
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "test/"
         }
     }
 }

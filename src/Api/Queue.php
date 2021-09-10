@@ -2,6 +2,8 @@
 
 namespace RabbitMq\ManagementApi\Api;
 
+use JsonException;
+
 /**
  * Queue
  *
@@ -16,28 +18,32 @@ class Queue extends AbstractApi
      *
      * A list of all queues in a given virtual host.
      *
-     * @param string|null $vhost
+     * @param  string|null  $vhost
+     *
      * @return array
+     * @throws JsonException
      */
     public function all($vhost = null)
     {
-        if ($vhost) {
-            return $this->client->send(sprintf('/api/queues/%s', urlencode($vhost)));
-        } else {
-            return $this->client->send('/api/queues');
-        }
+        return $vhost
+            ? $this->client->send(sprintf('/api/queues/%s', urlencode($vhost)))
+            : $this->client->send('/api/queues');
     }
 
     /**
      * An individual queue.
      *
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
+     * @throws JsonException
      */
     public function get($vhost, $name)
     {
-        return $this->client->send(sprintf('/api/queues/%s/%s', urlencode($vhost), urlencode($name)));
+        return $this->client->send(
+            sprintf('/api/queues/%s/%s', urlencode($vhost), urlencode($name))
+        );
     }
 
     /**
@@ -52,22 +58,31 @@ class Queue extends AbstractApi
      *
      * All keys are optional.
      *
-     * @param string $vhost
-     * @param string $name
-     * @param array $queue
+     * @param  string  $vhost
+     * @param  string  $name
+     * @param  array  $queue
+     *
      * @return array
+     * @throws JsonException
      */
     public function create($vhost, $name, array $queue)
     {
-        return $this->client->send(sprintf('/api/queues/%s/%s', urlencode($vhost), urlencode($name)), 'PUT', [], $queue);
+        return $this->client->send(
+            sprintf('/api/queues/%s/%s', urlencode($vhost), urlencode($name)),
+            'PUT',
+            [],
+            $queue
+        );
     }
 
     /**
-     * @param string $vhost
-     * @param string $name
-     * @param bool $ifEmpty
-     * @param bool $ifUnused
+     * @param  string  $vhost
+     * @param  string  $name
+     * @param  bool  $ifEmpty
+     * @param  bool  $ifUnused
+     *
      * @return array
+     * @throws JsonException
      */
     public function delete($vhost, $name, $ifEmpty = false, $ifUnused = false)
     {
@@ -87,9 +102,11 @@ class Queue extends AbstractApi
     /**
      * A list of all bindings on a given queue.
      *
-     * @param string $vhost
-     * @param string $queue
+     * @param  string  $vhost
+     * @param  string  $queue
+     *
      * @return array
+     * @throws JsonException
      */
     public function bindings($vhost, $queue)
     {
@@ -99,9 +116,11 @@ class Queue extends AbstractApi
     /**
      * Contents of a queue. DELETE to purge. Note you can't GET this.
      *
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
+     * @throws JsonException
      */
     public function purgeMessages($vhost, $name)
     {
@@ -131,19 +150,21 @@ class Queue extends AbstractApi
      * etc - they do not implement reliable delivery and so should be treated as a sysadmin's tool rather than a general
      * API for messaging.
      *
-     * @param string $vhost
-     * @param string $name
-     * @param integer $count
-     * @param bool $requeue
-     * @param string $encoding
-     * @param null|integer $truncate
+     * @param  string  $vhost
+     * @param  string  $name
+     * @param  integer  $count
+     * @param  bool  $requeue
+     * @param  string  $encoding
+     * @param  null|integer  $truncate
+     *
      * @return array
+     * @throws JsonException
      */
     public function retrieveMessages($vhost, $name, $count = 5, $requeue = true, $encoding = 'auto', $truncate = null)
     {
         $parameters = array(
-            'count' => $count,
-            'requeue' => $requeue,
+            'count'    => $count,
+            'requeue'  => $requeue,
             'encoding' => $encoding
         );
 

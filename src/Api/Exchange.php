@@ -18,23 +18,25 @@ class Exchange extends AbstractApi
      *
      * A list of all exchanges in a given virtual host.
      *
-     * @param null|string $vhost
+     * @param  null|string  $vhost
+     *
      * @return array
      */
     public function all($vhost = null)
     {
         if ($vhost) {
             return $this->client->send(sprintf('/api/exchanges/%s', urlencode($vhost)));
-        } else {
-            return $this->client->send('/api/exchanges');
         }
+
+        return $this->client->send('/api/exchanges');
     }
 
     /**
      * An individual exchange.
      *
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
      */
     public function get($vhost, $name)
@@ -55,15 +57,16 @@ class Exchange extends AbstractApi
      *
      * The 'type' key is mandatory; other keys are optional.
      *
-     * @param string $vhost
-     * @param string $name
-     * @param array  $exchange
+     * @param  string  $vhost
+     * @param  string  $name
+     * @param  array  $exchange
+     *
      * @return array
      * @throws \RabbitMq\ManagementApi\Exception\InvalidArgumentException
      */
     public function create($vhost, $name, array $exchange)
     {
-        if (!isset($exchange['type'])) {
+        if (! isset($exchange['type'])) {
             throw new InvalidArgumentException("Error creating exchange: Exchange key 'type' is mandatory");
         }
 
@@ -73,8 +76,9 @@ class Exchange extends AbstractApi
     /**
      * Delete an exchange
      *
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
      */
     public function delete($vhost, $name)
@@ -85,8 +89,9 @@ class Exchange extends AbstractApi
     /**
      * A list of all bindings in which a given exchange is the source.
      *
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
      */
     public function sourceBindings($vhost, $name)
@@ -97,8 +102,9 @@ class Exchange extends AbstractApi
     /**
      * A list of all bindings in which a given exchange is the destination.
      *
-     * @param string $vhost
-     * @param string $name
+     * @param  string  $vhost
+     * @param  string  $name
+     *
      * @return array
      */
     public function destinationBindings($vhost, $name)
@@ -128,21 +134,28 @@ class Exchange extends AbstractApi
      *
      * Please note that the publish / get paths in the HTTP API are intended for injecting test messages, diagnostics etc - they do not implement reliable delivery and so should be treated as a sysadmin's tool rather than a general API for messaging.
      *
-     * @param string $vhost
-     * @param string $name
-     * @param array $message
-     * @throws InvalidArgumentException
+     * @param  string  $vhost
+     * @param  string  $name
+     * @param  array  $message
+     *
      * @return array
+     * @throws InvalidArgumentException
      */
     public function publish($vhost, $name, array $message)
     {
-        if (!isset($message['properties'])) {
+        if (! isset($message['properties'])) {
             throw new InvalidArgumentException("Error publishing to exchange: Message key 'properties' is mandatory");
-        } elseif (!isset($message['routing_key'])) {
+        }
+
+        if (! isset($message['routing_key'])) {
             throw new InvalidArgumentException("Error publishing to exchange: Message key 'routing_key' is mandatory");
-        } elseif (!isset($message['payload'])) {
+        }
+
+        if (! isset($message['payload'])) {
             throw new InvalidArgumentException("Error publishing to exchange: Message key 'payload' is mandatory");
-        } elseif (!isset($message['payload_encoding'])) {
+        }
+
+        if (! isset($message['payload_encoding'])) {
             throw new InvalidArgumentException("Error publishing to exchange: Message key 'payload_encoding' is mandatory");
         }
 
