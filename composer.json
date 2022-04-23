@@ -25,8 +25,8 @@
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.3",
-        "illuminate/http": "^8.60",
-        "illuminate/support": "^8.60",
+        "illuminate/http": ">=8.60",
+        "illuminate/support": ">=8.60",
         "vlucas/phpdotenv": "^5.3"
     },
     "require-dev": {
